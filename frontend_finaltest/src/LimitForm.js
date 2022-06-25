@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { startTrading } from "./api";
 import "./LimitForm.css";
 
@@ -14,9 +14,9 @@ function sanitize(type, value) {
 }
 
 const INITIAL_VALUES = {
-  accessKey: "엑",
+  accessKey: "accesskey",
   secretKey: "secretkey",
-  lowerPrice: 90,
+  stopLoss: 90,
   budget: 100,
   gridNum: 0,
   lower: 0,
@@ -27,6 +27,7 @@ function LimitForm({
   onSubmit,
   onSubmitSuccess,
 }) {
+  const navigate = useNavigate();
   const [values, setValues] = useState(initialValues);
   const [submittingError, setSubmittingError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,9 +38,11 @@ function LimitForm({
     e.preventDefault();
     const formData = new FormData();
     formData.append("accessKey", values.accessKey);
-    formData.append("lowerPrice", values.lowerPrice);
+    formData.append("stopLoss", values.stopLoss);
     formData.append("budget", values.budget);
     formData.append("gridNum", values.gridNum);
+    formData.append("lower", values.lower);
+    formData.append("secretKey", values.secretKey)
     let result;
     try {
       setSubmittingError(null);
@@ -53,9 +56,35 @@ function LimitForm({
       setIsSubmitting(false);
     }
     const { food } = result;
+    startTrading(food);
     setValues(initialValues);
     onSubmitSuccess(food);
   };
+
+  function onSubmitTest(e) {
+    console.log("submit test")
+    e.preventDefault();
+    fetch("http://localhost:8080/kafka/grid-trading", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        budget: values.budget,
+        secretKey: values.secretKey,
+        accessKey: values.accessKey,
+        gridNum: values.gridNum,
+        lower: values.lower,
+        stopLoss: values.stopLoss,
+      }),
+    }).then((res) => {
+      if(res.ok) {
+        navigate(`/results`);
+        console.log("success");
+//        alert("success");
+      }
+    })
+  }
 
   const handleChange = (name, value) => {
     setValues((prevValues) => ({
@@ -70,7 +99,7 @@ function LimitForm({
   };
 
   return (
-    <form className="LimitForm" onSubmit={handleSubmit}>
+    <form className="LimitForm">
       <div className="LimitForm-columns">
         <div className="LimitForm-rows">
           <label htmlFor="accessKey">accessKey</label>
@@ -138,16 +167,16 @@ function LimitForm({
             onChange={handleInputChange}
           />
         </div>
-        <Link to="/results">
+//        <Link to="/results">
           <button
             className="LimitForm-submit-button"
             type="submit"
             disabled={isSubmitting}
-            onClick={startTrading}
+            onClick={onSubmitTest}
           >
             테스트 확인
           </button>
-        </Link>
+//        </Link>
         {submittingError && <p>{submittingError.message}</p>}
       </div>
     </form>

@@ -73,7 +73,7 @@ services:
       - kafka-net
 
   client:
-    build: ./frontend_test2
+    build: ./frontend_finaltest
     container_name: frontend
     ports:
       - "3000:3000"

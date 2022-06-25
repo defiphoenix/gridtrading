@@ -34,7 +34,6 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
 
 
 #############################
@@ -231,3 +230,7 @@ $RECYCLE.BIN/
 /src/main/java/com/ybigtaconference/gridtrading/credentials
 /src/main/java/testtest
 
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore

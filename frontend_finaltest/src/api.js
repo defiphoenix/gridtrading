@@ -17,6 +17,7 @@ export async function test(formData) {
 }
 
 export async function startTrading(formData) {
+  console.log(formData);
   // const options = {
   //   method: "POST",
   //   headers: { Accept: "application/json", "Content-Type": "application/json" },
@@ -33,11 +34,13 @@ export async function startTrading(formData) {
   //   .then((response) => response.json())
   //   .then((response) => console.log(response))
   //   .catch((err) => console.error(err));
-
-  const BASE_URL = "https://learn.codeit.kr/api/foods";
+  console.log("start trading");
+  const BASE_URL = "http://localhost:8080/kafka/grid-trading";
   const response = await fetch(`${BASE_URL}`, {
     method: "POST",
     body: formData,
+    headers: { Accept: "application/json" }
+//    headers: { "Content-Type": "application/json" }
   })
     .then((response) => response.json())
     .then((response) => console.log(response))

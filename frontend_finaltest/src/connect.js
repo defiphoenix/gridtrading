@@ -46,7 +46,7 @@ function CreatSocketConnection(type, conncectType, dataMaker) {
     }
   };
   socket.onerror = (e) => {
-    console.log(e);
+    //console.log(e);
   };
   return (
     <div>

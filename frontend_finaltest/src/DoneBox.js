@@ -34,9 +34,10 @@ const COLUMN_DATA = [
 
 const UPDATE_DATA = [
   {
-    timeStamp: "dmdpdpmdm",
-    opening_price: 111111,
-    trading_price: 222222,
+    order_price: "dmdpdpmdm",
+    trade_price: "dmdpdpmdm",
+    volume: "dmdpdpmdm",
+    side: "dmdpdpmdm"
   },
 ];
 
@@ -50,7 +51,7 @@ function DoneBox(
   const asyncTest = async () => {
     const options = { method: "GET", headers: { Accept: "application/json" } };
     fetch(
-      "https://api.upbit.com/v1/candles/minutes/1?market=KRW-BTC&count=10",
+      "http://localhost:8080/kafka/fetch-done",
       options
     )
       .then((response) => response.json())
@@ -69,21 +70,22 @@ function DoneBox(
 
   return (
     <div className="ResultBox">
-      <h1 className="ResultBox-heading">미체결(Sell)</h1>
+      <h1 className="ResultBox-heading">체결</h1>
       <table>
         <thead>
           <tr>
-            <th>타임스탬프</th>
-            <th>오픈</th>
-            <th>종가</th>
+            <th>order_price</th>
+            <th>trade_price</th>
+            <th>volume</th>
+            <th>side</th>
           </tr>
         </thead>
         <tbody>
           {updateTest.map((updateTest) => (
-            <tr key={updateTest.candle_date_time_kst}>
-              <td>{updateTest.candle_date_time_utc}</td>
-              <td>{updateTest.opening_price}</td>
+            <tr key={updateTest.order_price}>
               <td>{updateTest.trade_price}</td>
+              <td>{updateTest.volume}</td>
+              <td>{updateTest.side}</td>
             </tr>
           ))}
         </tbody>

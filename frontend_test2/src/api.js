@@ -18,6 +18,7 @@ export async function test(formData) {
 
 export async function startTrading(formData) {
   console.log("테스트트레이딩");
+  console.log(formData);
   const BASE_URL = "localhost:8080/kafka/grid-trading";
   const response = await fetch(`${BASE_URL}`, {
     method: "POST",
